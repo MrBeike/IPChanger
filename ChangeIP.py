@@ -20,6 +20,7 @@ class ChangeIP:
                 'name' : netcard.Description
             }
             self.netcard_infos.append(netcard_info)
+        return self.netcard_infos
 
     def selectCard(self):
         '''
@@ -29,7 +30,7 @@ class ChangeIP:
             card = self.netcards[0]
         else:
             for index,info in enumerate(self.netcard_infos):
-                print(f"【{index + 1}】-->{info['name']}:{info['ip']}")
+                print(f"【{index + 1}】-->{info['name']} | {info['ip']}")
             select = int(input('请选择要修改的显卡【序号】 ').strip()) -1
             card = self.netcards[select]
         return card
@@ -77,3 +78,4 @@ class ChangeIP:
         # TODO 记录所有结果？
         def log(self):
             pass
+
