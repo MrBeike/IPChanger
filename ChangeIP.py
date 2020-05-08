@@ -39,7 +39,7 @@ class ChangeIP:
         '''
         Set the card using giving config info. 
         params: card: wmi_object, the card to be modify.
-        params: json: str, config info {ip,subnetmask,gateway,dns}
+        params: json: str[json.dumps], config info {ip,subnetmask,gateway,dns}
         '''
         setter_info = json.loads(json)
         # 开始设置IP地址段信息

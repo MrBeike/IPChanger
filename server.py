@@ -3,6 +3,7 @@
 import socket
 import json
 
+from functions import *
 
 class Server:
     def __init__(self):
@@ -31,14 +32,15 @@ class Server:
             # 这里clientAddr存放的就是连接服务器的客户端地址
             # client_socket, clientAddr
             client_info = self.server.accept()
+            self.setConfig(client_info)
 
-    def setConfig(self, client_info):
+    def sendConfig(self, client_info):
         client_socket, clientAddr = client_socket
         recv_data = client_socket.recv(1024)
         recv_data_json = json.loads(recv_data)
         if recv_data_json['name']:
             storeData(recv_data_json)
-            config = readConfig(recv_data_json['name'])
+            config = getConfig(recv_data_json['name'])
             client_socket.send(json.loads(config))
             client_socket.close()
 
