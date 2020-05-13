@@ -14,10 +14,13 @@ class ChangeIP:
         '''
         self.netcard_infos =[]
         for netcard in self.netcards:
-            #tuple
+            #see wmi_object in file Tips
             netcard_info = {
                 'ip' : netcard.IPAddress[0],
-                'name' : netcard.Description
+                'name' : netcard.Description,
+                'subnetmask':netcard.IPSubnet[0],
+                'gateway':netcard.DefaultIPGateway[0],
+                'dns': netcard.DNSServerSearchOrder[0]
             }
             self.netcard_infos.append(netcard_info)
         return self.netcard_infos
@@ -28,12 +31,14 @@ class ChangeIP:
         '''
         if self.netcard_infos.__len__ == 1:
             self.card = self.netcards[0]
+            self.card_info = self.netcard_infos[0]
         else:
             for index,info in enumerate(self.netcard_infos):
                 print(f"【{index + 1}】-->{info['name']} | {info['ip']}")
             select = int(input('请选择要修改的显卡【序号】 ').strip()) -1
             self.card = self.netcards[select]
-        return self.card
+            self.card_info = self.netcard_infos[select]
+        return self.card,self.card_info
 
     def setCardInfo(self,info):
         '''
@@ -94,13 +99,29 @@ class ChangeIP:
                 config[key] = value
         return config
 
+    @staticmethod
+    # 通过json数据判定修改某个部分，修改值匹配
+    def addressSub(originAddress,positon,value):
+        '''
+        params: originAddress: str, the string of address value.
+        params: positon: int ,the positon of value to change.
+        params: value: int ,the target value.
+        '''
+        address_list = originAddress.split('.')
+        address_list[positon-1] = str(value)
+        print(address_list)
+        target_address = '.'.join(address_list)
+        return target_address
+
+    def infoReMaker(self):
+        ip = self.card_info['ip']
+        subnetmask = self.card_info['subnetmask']
+        gateway = self.card_info['gateway']
+        dns = self.card_info['dns']
+
 
 if __name__ == '__main__': 
     c = ChangeIP()
     c.getCardInfo()
     # wmi_object is not subscripabl
-    ip = c.selectCard()['ip']
-    dict = c.getConfig('config')
-    info = json.dumps(dict)
-    the_info = info[ip]
-    c.setCardInfo(the_info)
+

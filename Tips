@@ -1,0 +1,38 @@
+wmi_object example:
+instance of Win32_NetworkAdapterConfiguration
+{
+        Caption = "[00000010] Realtek PCIe GbE Family Controller";
+        DatabasePath = "%SystemRoot%\\System32\\drivers\\etc";
+        DefaultIPGateway = {"192.168.2.1"};
+        DefaultTTL = 64;
+        Description = "Realtek PCIe GbE Family Controller";
+        DHCPEnabled = TRUE;
+        DHCPLeaseExpires = "20200514180639.000000+480";
+        DHCPLeaseObtained = "20200513180639.000000+480";
+        DHCPServer = "192.168.2.1";
+        DNSDomainSuffixSearchOrder = {};
+        DNSEnabledForWINSResolution = FALSE;
+        DNSHostName = "CoatLee";
+        DNSServerSearchOrder = {"192.168.2.1"};
+        DomainDNSRegistrationEnabled = FALSE;
+        FullDNSRegistrationEnabled = TRUE;
+        GatewayCostMetric = {0};
+        Index = 10;
+        InterfaceIndex = 10;
+        IPAddress = {"192.168.2.100"};
+        IPConnectionMetric = 35;
+        IPEnabled = TRUE;
+        IPFilterSecurityEnabled = FALSE;
+        IPSecPermitIPProtocols = {};
+        IPSecPermitTCPPorts = {};
+        IPSecPermitUDPPorts = {};
+        IPSubnet = {"255.255.255.0"};
+        MACAddress = "1C:87:2C:56:F2:D6";
+        PMTUBHDetectEnabled = FALSE;
+        PMTUDiscoveryEnabled = TRUE;
+        ServiceName = "rt640x64";
+        SettingID = "{4998B2A2-E73B-4290-A0B2-DBB476375F95}";
+        TcpipNetbiosOptions = 0;
+        WINSEnableLMHostsLookup = TRUE;
+        WINSScopeID = "";
+};
