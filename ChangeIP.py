@@ -35,19 +35,19 @@ class ChangeIP:
         else:
             for index,info in enumerate(self.netcard_infos):
                 print(f"【{index + 1}】-->{info['name']} | {info['ip']}")
-            select = int(input('请选择要修改的显卡【序号】 ').strip()) -1
-            self.card = self.netcards[select]
-            self.card_info = self.netcard_infos[select]
+            self.select = int(input('请选择要修改的显卡【序号】 ').strip()) -1
+            self.card = self.netcards[self.select]
+            self.card_info = self.netcard_infos[self.select]
         return self.card,self.card_info
 
-    def setCardInfo(self,info):
+    def setCardInfo(self,setterInfo):
         '''
         Set the card using giving config info. 
-        params: info: str[json.dumps], config info {ip,subnetmask,gateway,dns}
+        params: info: dict, config info {ip,subnetmask,gateway,dns}
         '''
-        setter_info = json.loads(info)
         # 开始设置IP地址段信息
         # FIXME 设置的值必须是数组形式？
+        setter_info = setterInfo
         ip = [setter_info['ip']]
         subnetmask = [setter_info['subnetmask']]
         gateway = [setter_info['gateway']]
@@ -84,7 +84,7 @@ class ChangeIP:
         #     pass
         
     @staticmethod
-    def getConfig(filename):
+    def configParse(filename):
     # [originIP,newIP,subnetmask,gateway,dns]
         config ={}
         with open(filename,encoding='utf-8') as f:
@@ -98,6 +98,11 @@ class ChangeIP:
                 key = config_list[0]
                 config[key] = value
         return config
+    
+    def getConfig(self,config):
+        ip = self.card_info['ip']
+        setter_info = config[ip]
+        return setter_info
 
     @staticmethod
     # 通过json数据判定修改某个部分，修改值匹配
@@ -119,9 +124,23 @@ class ChangeIP:
         gateway = self.card_info['gateway']
         dns = self.card_info['dns']
 
+    def configVerify(self):
+        wmi_service = wmi.WMI()
+        netcards = wmi_service.Win32_NetworkAdapterConfiguration(IPEnabled=True)
+        selected_card = netcards[self.select]
+        ip = selected_card.netcard.IPAddress[0]
+        subnetmask = selected_card.IPSubnet[0]
+        gateway= selected_card.DefaultIPGateway[0]
+        if (ip == self.card_info['ip']) and (subnetmask == self.card_info['subnetmask']) and (gateway == self.card_info['gateway']):
+            return True
+        else:
+            self.setCardInfo(self.setter_info)
+        
 
 if __name__ == '__main__': 
     c = ChangeIP()
     c.getCardInfo()
-    # wmi_object is not subscripabl
-
+    c.selectCard()
+    config = c.configParse('ip_map.csv')
+    setter_info = c.getConfig(config)
+    c.setCardInfo(setter_info)
